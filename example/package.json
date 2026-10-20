@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "dev": "vite",
+    "web": "vite",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -19,8 +21,12 @@
     "@babel/runtime": "^7.20.0",
     "@react-native/eslint-config": "^0.72.2",
     "@react-native/metro-config": "^0.72.11",
+    "@vitejs/plugin-react": "^6.1.2",
     "babel-plugin-module-resolver": "^5.0.0",
-    "metro-react-native-babel-preset": "0.76.8"
+    "metro-react-native-babel-preset": "0.76.8",
+    "react-dom": "^18.2.0",
+    "react-native-web": "^0.21.4",
+    "vite": "^8.3.4"
   },
   "engines": {
     "node": ">=16"

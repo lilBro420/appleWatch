@@ -1,57 +1,108 @@
-import * as React from 'react';
-import RNFS from 'react-native-fs';
-
-import { StyleSheet, View, Text, Button } from 'react-native';
-import { addWatchFace } from 'react-native-watch-face';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
+import type { ElementType } from './types';
+import { WATCH_THEMES } from './constants/themes';
+import { usePokemonWatchData } from './hooks/usePokemonWatchData';
+import { useBattery } from './hooks/useBattery';
+import { AppleWatchChassis } from './components/AppleWatchChassis';
+import { WatchFaceContent } from './components/WatchFaceContent';
+import { ThemeSelector } from './components/ThemeSelector';
 
 export default function App() {
-  const [result, setResult] = React.useState<boolean | undefined>();
-  async function handlePress() {
-    try {
-      const fileUrl = 'http://localhost/Astronomy.watchface';
-      const tempDir = RNFS.TemporaryDirectoryPath;
-      const tempFilePath = `${tempDir}/Astronomy.watchface`;
+  const [currentType, setCurrentType] = useState<ElementType>('fire');
+  const currentTheme = WATCH_THEMES[currentType];
+  const [currentPokemonId, setCurrentPokemonId] = useState<number>(currentTheme.defaultPokemonId);
 
-      const download = RNFS.downloadFile({
-        fromUrl: fileUrl,
-        toFile: tempFilePath,
-      });
+  // Hook desacoplado para las peticiones a PokeAPI
+  const { pokemon, loading } = usePokemonWatchData(currentPokemonId);
 
-      download.promise
-        .then((response) => {
-          if (response.statusCode === 200) {
-            addWatchFace(tempFilePath).then((r) => {
-              setResult(r);
-            });
-          } else {
-            console.error(response.statusCode);
-          }
-        })
-        .catch((error) => {
-          console.error('Error downloading file:', error);
-        });
-    } catch (error) {
-      console.error('Error adding watch face:', error);
-    }
-  }
+  // Sensor de batería del dispositivo
+  const battery = useBattery();
+
+  // Cambiar tipo elemental (Fuego, Agua, Planta)
+  const handleSelectType = (newType: ElementType) => {
+    setCurrentType(newType);
+    setCurrentPokemonId(WATCH_THEMES[newType].defaultPokemonId);
+  };
+
+  // Cambiar Pokémon por ID específico
+  const handleSelectPokemon = (id: number) => {
+    setCurrentPokemonId(id);
+  };
+
+  // Selección aleatoria dentro del tipo activo
+  const handleRandomPokemon = () => {
+    const list = currentTheme.pokemonList;
+    const candidates = list.filter((p) => p.id !== currentPokemonId);
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)] || list[0];
+    setCurrentPokemonId(chosen.id);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-      <Button onPress={handlePress} title="add Watch Face"></Button>
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#0B0E14" />
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Encabezado */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>
+            EDICIÓN <Text style={{ color: currentTheme.accentColor }}>{currentTheme.name}</Text>
+          </Text>
+        </View>
+
+        {/* Chassis oficial del Apple Watch */}
+        <AppleWatchChassis accentColor={currentTheme.accentColor}>
+          <WatchFaceContent
+            theme={currentTheme}
+            pokemon={pokemon}
+            loading={loading}
+            battery={battery}
+          />
+        </AppleWatchChassis>
+
+        {/* Panel de Controles y Selector de Temas */}
+        <ThemeSelector
+          currentType={currentType}
+          onSelectType={handleSelectType}
+          currentPokemonId={currentPokemonId}
+          onSelectPokemon={handleSelectPokemon}
+          onRandomPokemon={handleRandomPokemon}
+          pokemon={pokemon}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#0B0E14',
+    minHeight: '100%',
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  scrollContainer: {
+    alignItems: 'center',
+    paddingTop: 24,
+    paddingBottom: 36,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 8,
+    paddingHorizontal: 16,
+  },
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: '900',
+    letterSpacing: 2,
   },
 });

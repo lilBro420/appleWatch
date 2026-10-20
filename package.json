@@ -27,6 +27,8 @@
     "!**/.*"
   ],
   "scripts": {
+    "dev": "npm --prefix example run web",
+    "web": "npm --prefix example run web",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",

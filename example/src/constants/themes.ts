@@ -1,0 +1,55 @@
+import type { WatchTheme } from '../types';
+
+export const WATCH_THEMES: Record<string, WatchTheme> = {
+  fire: {
+    type: 'fire',
+    name: 'FUEGO',
+    tagline: 'EDICIÓN MAGMA & LLAMAS',
+    accentColor: '#FF5722',
+    secondaryColor: '#FF9800',
+    glowColor: 'rgba(255, 87, 34, 0.35)',
+    dialHandColor: '#FF5722',
+    defaultPokemonId: 6,
+    pokemonList: [
+      { id: 6, name: 'Charizard' },
+      { id: 59, name: 'Arcanine' },
+      { id: 815, name: 'Cinderace' },
+    ],
+    statLabel: 'CALORÍAS',
+    statUnit: 'KCAL',
+  },
+  water: {
+    type: 'water',
+    name: 'AGUA',
+    tagline: 'EDICIÓN OCÉANO & ABISAL',
+    accentColor: '#00D4FF',
+    secondaryColor: '#0077FE',
+    glowColor: 'rgba(0, 212, 255, 0.35)',
+    dialHandColor: '#00D4FF',
+    defaultPokemonId: 9,
+    pokemonList: [
+      { id: 9, name: 'Blastoise' },
+      { id: 658, name: 'Greninja' },
+      { id: 130, name: 'Gyarados' },
+    ],
+    statLabel: 'PROFUNDIDAD',
+    statUnit: 'M',
+  },
+  grass: {
+    type: 'grass',
+    name: 'PLANTA',
+    tagline: 'EDICIÓN SELVA & FLORA',
+    accentColor: '#10E760',
+    secondaryColor: '#059669',
+    glowColor: 'rgba(16, 231, 96, 0.35)',
+    dialHandColor: '#10E760',
+    defaultPokemonId: 3,
+    pokemonList: [
+      { id: 3, name: 'Venusaur' },
+      { id: 254, name: 'Sceptile' },
+      { id: 724, name: 'Decidueye' },
+    ],
+    statLabel: 'PASOS',
+    statUnit: 'PASOS',
+  },
+};
