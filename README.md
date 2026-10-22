@@ -50,3 +50,4 @@ This plugin is licensed under the MIT License.
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
 
+# appleWatch
