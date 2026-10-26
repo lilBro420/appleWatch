@@ -11,9 +11,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'react-native': path.resolve(__dirname, 'node_modules/react-native-web'),
-      'react-native-watch-face': path.resolve(__dirname, '../src/index.tsx'),
-      'react-native-fs': path.resolve(__dirname, 'src/mockRNFS.ts'),
+      'react-native': path.resolve(import.meta.dirname, 'node_modules/react-native-web'),
+      'react-native-watch-face': path.resolve(import.meta.dirname, '../src/index.tsx'),
+      'react-native-fs': path.resolve(import.meta.dirname, 'src/mockRNFS.ts'),
     },
     extensions: [
       '.web.tsx',

@@ -1,34 +1,38 @@
-export type ElementType = 'fire' | 'water' | 'grass';
-
-export const POKEMON_ELEMENTS: ElementType[] = ['fire', 'water', 'grass'];
-
-export interface PokemonItem {
-  id: number;
-  name: string;
+export interface SobrietyTracker {
+  id: string;
+  title: string;
+  category: string;
+  startDate: string; // ISO string e.g. "2026-03-10T12:00:00.000Z"
+  color: string;
+  tag: string; // Acronym or short text like "ALC", "NIC", "AZU"
+  pledge?: string;
 }
 
-export interface PokemonInfo {
-  id: number;
-  name: string;
-  genus: string; // e.g. "Pokémon Llama"
-  flavorText: string;
-  image: string; // Arte oficial en alta resolución
-  sprite?: string; // Pixel sprite para tarjetas y miniaturas
-  hp: number;
-  attack: number;
-  speed: number;
+export interface Milestone {
+  days: number;
+  label: string;
+  badge: string;
+  chipColor: string;
 }
 
-export interface WatchTheme {
-  type: ElementType;
+export interface TimeElapsed {
+  totalSeconds: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+export interface BibleVerse {
+  book: string;
+  chapter: string;
+  verse: string;
+  reference: string;
+  text: string;
+}
+
+export interface SponsorContact {
   name: string;
-  tagline: string;
-  accentColor: string;
-  secondaryColor: string;
-  glowColor: string;
-  dialHandColor: string;
-  defaultPokemonId: number;
-  pokemonList: PokemonItem[];
-  statLabel: string;
-  statUnit: string;
+  role: string;
+  phone: string;
 }

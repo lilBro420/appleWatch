@@ -1,84 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
   Text,
   SafeAreaView,
-  ScrollView,
   StatusBar,
 } from 'react-native';
-import type { ElementType } from './types';
-import { WATCH_THEMES } from './constants/themes';
-import { usePokemonWatchData } from './hooks/usePokemonWatchData';
-import { useBattery } from './hooks/useBattery';
-import { AppleWatchChassis } from './components/AppleWatchChassis';
-import { WatchFaceContent } from './components/WatchFaceContent';
-import { ThemeSelector } from './components/ThemeSelector';
+import { DualDeviceSimulator } from './components/DualDeviceSimulator';
 
 export default function App() {
-  const [currentType, setCurrentType] = useState<ElementType>('fire');
-  const currentTheme = WATCH_THEMES[currentType];
-  const [currentPokemonId, setCurrentPokemonId] = useState<number>(currentTheme.defaultPokemonId);
-
-  // Hook desacoplado para las peticiones a PokeAPI
-  const { pokemon, loading } = usePokemonWatchData(currentPokemonId);
-
-  // Sensor de batería del dispositivo
-  const battery = useBattery();
-
-  // Cambiar tipo elemental (Fuego, Agua, Planta)
-  const handleSelectType = (newType: ElementType) => {
-    setCurrentType(newType);
-    setCurrentPokemonId(WATCH_THEMES[newType].defaultPokemonId);
-  };
-
-  // Cambiar Pokémon por ID específico
-  const handleSelectPokemon = (id: number) => {
-    setCurrentPokemonId(id);
-  };
-
-  // Selección aleatoria dentro del tipo activo
-  const handleRandomPokemon = () => {
-    const list = currentTheme.pokemonList;
-    const candidates = list.filter((p) => p.id !== currentPokemonId);
-    const chosen = candidates[Math.floor(Math.random() * candidates.length)] || list[0];
-    setCurrentPokemonId(chosen.id);
-  };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#0B0E14" />
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Encabezado */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>
-            EDICIÓN <Text style={{ color: currentTheme.accentColor }}>{currentTheme.name}</Text>
-          </Text>
-        </View>
 
-        {/* Chassis oficial del Apple Watch */}
-        <AppleWatchChassis accentColor={currentTheme.accentColor}>
-          <WatchFaceContent
-            theme={currentTheme}
-            pokemon={pokemon}
-            loading={loading}
-            battery={battery}
-          />
-        </AppleWatchChassis>
+      {/* Encabezado Principal */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>
+          CONTROL DE <Text style={styles.headerAccent}>SOBRIEDAD</Text>
+        </Text>
+        <Text style={styles.headerSub}>
+          Apple Watch (Izquierda) + iPhone 15 Pro Max (Derecha) sincronizados en tiempo real
+        </Text>
+      </View>
 
-        {/* Panel de Controles y Selector de Temas */}
-        <ThemeSelector
-          currentType={currentType}
-          onSelectType={handleSelectType}
-          currentPokemonId={currentPokemonId}
-          onSelectPokemon={handleSelectPokemon}
-          onRandomPokemon={handleRandomPokemon}
-          pokemon={pokemon}
-        />
-      </ScrollView>
+      {/* Simulador Dual: Watch a la izquierda, iPhone a la derecha */}
+      <DualDeviceSimulator />
     </SafeAreaView>
   );
 }
@@ -89,20 +35,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#0B0E14',
     minHeight: '100%',
   },
-  scrollContainer: {
-    alignItems: 'center',
-    paddingTop: 24,
-    paddingBottom: 36,
-  },
   header: {
     alignItems: 'center',
-    marginBottom: 8,
+    paddingTop: 20,
+    paddingBottom: 6,
     paddingHorizontal: 16,
+    backgroundColor: '#0B0E14',
   },
   headerTitle: {
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '900',
     letterSpacing: 2,
+  },
+  headerAccent: {
+    color: '#30D158',
+  },
+  headerSub: {
+    color: '#6E7681',
+    fontSize: 12,
+    marginTop: 4,
+    textAlign: 'center',
+    maxWidth: 600,
   },
 });
